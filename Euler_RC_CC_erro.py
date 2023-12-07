@@ -40,15 +40,18 @@ def Euler(a: int, b: int, alfa: float, n: int):
         erro.append(abs(((y_exato[i] - y[i]) / y_exato[i])))  # fornecido pelo PVI
 
     # plot gráfico
-    plt.subplot(1, 2, 1)
-    plt.title("Gráfico i(t) [mA] x t [s]")
+    # plt.subplot(1, 2, 1)
+    plt.figure()
+    plt.title("Gráfico i(t)[mA] x t [s]")
     plt.xlabel("t[s]")
     plt.ylabel("i(t)")
     plt.plot(t, y, color="red", marker="o", linestyle="--")  # y_aprox
+    plt.plot(t, y_exato)  # y_exato
+    plt.legend(["y_aprox", "y_exato"])
 
     # plot tabela
-    plt.subplot(1, 2, 2).axis("off")
-    # plt.figure()
+    # plt.subplot(1, 2, 2).axis("off")
+    plt.figure()
     data = [["ti", "i_aprox", "i_exato", "Er"]]
     for i in range(0, n + 1):
         data.append(
@@ -69,4 +72,4 @@ def Euler(a: int, b: int, alfa: float, n: int):
     plt.show()
 
 
-Euler(a=0, b=100, alfa=48, n=25)
+Euler(a=0, b=100, alfa=48, n=500)

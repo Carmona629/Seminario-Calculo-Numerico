@@ -1,3 +1,4 @@
+import numpy as np
 import matplotlib.pyplot as plt
 
 
@@ -16,9 +17,17 @@ def Euler(a: int, b: int, alfa: float, n: int):
     f = [0] * (n + 1)
     f[0] = -y[0] / 16  # fornecido pelo PVI
 
+    # y exato
+    y_exato = []
+    y_exato.append(48)  # y[0] + h * (-3 * np.e ** (-t[0] / 16)))  # fórmula exata
+    print(y[0])
+    print(h)
+    print(-3 * np.e ** (-t[0] / 16))
+    # print(y_exato)
+
     # erro
     erro = []
-    erro.append(0)  # ((y_exato[0] - y[0]) / y_exato[0])
+    erro.append(0)  # (y_exato[0] - y[0]) / y_exato[0])
 
     for i in range(1, n + 1):
         k1 = f[i - 1]
@@ -31,18 +40,33 @@ def Euler(a: int, b: int, alfa: float, n: int):
 
         f[i] = -y[i] / 16
 
+        y_exato.append(y[i] + h * (-3 * np.e ** (-t[i] / 16)))  # fórmula exata
+
+        erro.append(abs(((y_exato[i] - y[i]) / y_exato[i])))  # fornecido pelo PVI
+
     # plot gráfico
-    plt.subplot(1, 2, 1)
-    plt.title("Gráfico i(t) x t [s]")
+    # plt.subplot(1, 2, 1)
+    plt.figure()
+    plt.title("Gráfico i(t) [mA] x t [s]")
     plt.xlabel("t[s]")
     plt.ylabel("i(t)")
     plt.plot(t, y, color="red", marker="o", linestyle="--")  # y_aprox
+    plt.plot(t, y_exato)  # y_exato
+    plt.legend(["y_aprox", "y_exato"])
 
     # plot tabela
-    plt.subplot(1, 2, 2).axis("off")
-    data = [["ti", "i_aprox"]]
+    # plt.subplot(1, 2, 2).axis("off")
+    plt.figure()
+    data = [["ti", "i_aprox", "i_exato", "Er"]]
     for i in range(0, n + 1):
-        data.append([f"{t[i]:.3f}", f"{y[i]:.3f}"])
+        data.append(
+            [
+                f"{t[i]:.3f}",
+                f"{y[i]:.3f}",
+                f"{y_exato[i]:.3f}",
+                f"{erro[i]:.3f}",
+            ]
+        )
     table = plt.table(cellText=data, loc="center", cellLoc="center")
     # Ajustar o layout da tabela
     table.auto_set_font_size(False)
@@ -53,4 +77,4 @@ def Euler(a: int, b: int, alfa: float, n: int):
     plt.show()
 
 
-Euler(a=0, b=100, alfa=48, n=50)
+Euler(a=0, b=100, alfa=48, n=500)
